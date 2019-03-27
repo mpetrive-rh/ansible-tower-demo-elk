@@ -12,7 +12,7 @@ Vagrant.configure("2") do |cluster|
 #    config.vm.hostname = "ldapvm"
 #    config.vm.network :private_network, ip: "172.16.2.9"
 #  end
-  
+ 
   cluster.vm.define "elk" do |config|
     config.vm.box = "centos/7"
     config.ssh.insert_key = false
@@ -35,48 +35,21 @@ Vagrant.configure("2") do |cluster|
     config.vm.network :private_network, ip: "172.16.2.42"
   end
 
-  cluster.vm.define "demovm1" do |config|
-    config.vm.box = "centos/7"
-    config.ssh.insert_key = false
-    config.vm.provider :libvirt do |vb|
-      vb.memory = 512
+  (1..4).each do |i|
+    cluster.vm.define "demovm#{i}" do |config|
+      config.vm.box = "centos/7"
+      config.ssh.insert_key = false
+      config.vm.provider :libvirt do |v|
+        v.memory = 512
+      end
+      config.vm.hostname = "demovm#{i}"
+      config.vm.network :private_network, ip: "172.16.2.1#{i}"
     end
-    config.vm.hostname = "demovm1"
-    config.vm.network :private_network, ip: "172.16.2.5"
   end
-
-#  cluster.vm.define "demovm2" do |config|
-#    config.vm.box = "centos/7"
-#    config.ssh.insert_key = false
-#    config.vm.provider :libvirt do |vb|
-#      vb.memory = 512
-#    end
-#    config.vm.hostname = "demovm2"
-#    config.vm.network :private_network, ip: "172.16.2.6"
-#  end
-
-#  cluster.vm.define "demovm3" do |config|
-#    config.vm.box = "centos/7"
-#    config.ssh.insert_key = false
-#    config.vm.provider :libvirt do |vb|
-#      vb.memory = 512
-#    end
-#    config.vm.hostname = "demovm3"
-#    config.vm.network :private_network, ip: "172.16.2.7"
-#   end
-
-#  cluster.vm.define "demovm4" do |config|
-#    config.vm.box = "centos/7"
-#    config.ssh.insert_key = false
-#    config.vm.provider :libvirt do |vb|
-#      vb.memory = 512
-#    end
-#    config.vm.hostname = "demovm4"
-#    config.vm.network :private_network, ip: "172.16.2.8"
-#  end
 
   cluster.vm.provision "ansible" do |ansible|
     ansible.playbook = "site.yml"
+    ansible.become = True
     ansible.groups = {
       "elk" => ["elk"],
       "tower" => ["tower"],
