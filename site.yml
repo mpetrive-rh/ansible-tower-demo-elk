@@ -3,29 +3,30 @@
   hosts: all
   gather_facts: false
   roles:
-  - vagrant-common
+  - name: vagrant-common
 
 - name: Install OpenLDAP
-  hosts: openldap
+  hosts: openldapvm
   roles:
-  - openldap
+  - name: openldap
 
 - name: Install ELK
-  hosts: elk
+  hosts: elkvm
   roles:
-  - geerlingguy.java
-  - geerlingguy.elasticsearch
-  - geerlingguy.logstash
-  - geerlingguy.kibana
+  - name: geerlingguy.java
+  - name: geerlingguy.elasticsearch
+  - name: ansible-role-logstash
+    logstash_filters:
+      - logstash.conf
+  - name: geerlingguy.kibana
 
 - name: Install and provision Ansible Tower
-  hosts: tower
+  hosts: towervm
   vars:
     towerpass: password1
+    ldaplicense: false
   roles:
-  - tower  
-
-- name: 
+  - name: tower  
 
 #  roles:
 #    - { role: vagrant-common, when "'tag_Vagrant_True' in group_names" }

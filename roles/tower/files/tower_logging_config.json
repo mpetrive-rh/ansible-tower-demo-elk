@@ -1,0 +1,16 @@
+{
+    "LOG_AGGREGATOR_HOST": "172.16.2.10",
+    "LOG_AGGREGATOR_PORT": "5505",
+    "LOG_AGGREGATOR_TYPE": "logstash",
+    "LOG_AGGREGATOR_LOGGERS": [
+        "awx",
+        "activity_stream",
+        "job_events",
+        "system_tracking"
+    ],
+    "LOG_AGGREGATOR_INDIVIDUAL_FACTS": false,
+    "LOG_AGGREGATOR_ENABLED": true,
+    "LOG_AGGREGATOR_PROTOCOL": "tcp",
+    "LOG_AGGREGATOR_TCP_TIMEOUT": 5,
+    "LOG_AGGREGATOR_LEVEL": "INFO"
+}
