@@ -33,7 +33,21 @@ Vagrant.configure("2") do |cluster|
     end
     config.vm.hostname = "tower"
     config.vm.network :private_network, ip: "172.16.2.42"
+    
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "site.yml"
+      ansible.limit = "all"
+      ansible.become = true
+      ansible.groups = {
+        "elkvm" => ["elk"],
+        "openldapvm" => ["openldap"],
+        "towervm" => ["tower"],
+        "demovm" => ["demovm1", "demovm2", "demovm3", "demovm4"]
+      }
+      ansible.galaxy_role_file = "requirements.yml"
+    end
   end
+
 
   (1..1).each do |i|
 #  (1..4).each do |i|
@@ -46,19 +60,6 @@ Vagrant.configure("2") do |cluster|
       config.vm.hostname = "demovm#{i}"
       config.vm.network :private_network, ip: "172.16.2.1#{i}"
     end
-  end
-
-  cluster.vm.provision "ansible" do |ansible|
-    ansible.playbook = "site.yml"
-    ansible.become = true
-    ansible.groups = {
-      "elkvm" => ["elk"],
-      "openldapvm" => ["openldap"],
-      "towervm" => ["tower"],
-      "demovm" => ["demovm1", "demovm2", "demovm3", "demovm4"]
-    }
-    ansible.galaxy_role_file = "requirements.yml"
-    ansible.verbose = true
   end
 
 end
