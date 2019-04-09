@@ -12,7 +12,7 @@ Vagrant.configure("2") do |cluster|
 #    config.vm.hostname = "ldapvm"
 #    config.vm.network :private_network, ip: "172.16.2.9"
 #  end
- 
+
   cluster.vm.define "elk" do |config|
     config.vm.box = "centos/7"
     config.ssh.insert_key = false
@@ -23,7 +23,7 @@ Vagrant.configure("2") do |cluster|
     config.vm.hostname = "elk"
     config.vm.network :private_network, ip: "172.16.2.10"
   end
- 
+
   cluster.vm.define "tower" do |config|
     config.vm.box = "centos/7"
     config.ssh.insert_key = false
@@ -33,7 +33,7 @@ Vagrant.configure("2") do |cluster|
     end
     config.vm.hostname = "tower"
     config.vm.network :private_network, ip: "172.16.2.42"
-    
+
     config.vm.provision "ansible" do |ansible|
       ansible.playbook = "site.yml"
       ansible.limit = "all"
@@ -46,6 +46,11 @@ Vagrant.configure("2") do |cluster|
       }
       ansible.galaxy_role_file = "requirements.yml"
     end
+
+    config.vm.network :forwarded_port,
+      guest: 443,
+      host: 4443
+
   end
 
 
