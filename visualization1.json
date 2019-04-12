@@ -1,0 +1,46 @@
+{
+  "attributes": {
+    "description": "Tower Playbooks API",
+    "visState": {
+      "title": "Tower-Playbooks-API",
+      "type": "table"
+    },
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": {
+          "index": "tower-all",
+          "query": {
+            "query": "event:playbook_on_stats",
+            "language": "lucene"
+          },
+          "filter": [
+            {
+              "meta": {
+                "index": "tower-all",
+                "negate": false,
+                "disabled": true,
+                "alias": "FAIILURE",
+                "type": "phrase",
+                "key": "failed",
+                "value": "true",
+                "params": {
+                  "query": true,
+                  "type": "phrase"
+                }
+              },
+              "query": {
+                "match": {
+                  "failed": {
+                    "query": true,
+                    "type": "phrase"
+                  }
+                }
+              },
+              "$state": {
+                "store": "appState"
+              }
+            }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+    "visState" : {
+        "title": "BASE-TEST",
+        "type": "table",
+        "params": {
+          "perPage": 10,
+          "showPartialRows": false,
+          "showMetricsAtAllLevels": false,
+          "sort": {
+            "columnIndex": null,
+            "direction": null
+          },
+          "showTotal": false,
+          "totalFunc": "sum"
+        },
+        "aggs": [
+          {
+            "id": "1",
+            "enabled": true,
+            "type": "count",
+            "schema": "metric",
+            "params": {}
+          }
+        ]
+    },
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": {
+        "index": "tower-all",
+        "query": {
+          "query": "",
+          "language": "kuery"
+        },
+        "filter": []
+      }
+    },
+    "title" : "foo",
+    "savedSearchId": "foo"
+}

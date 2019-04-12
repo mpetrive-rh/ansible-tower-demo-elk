@@ -1,0 +1,6 @@
+{
+  "attributes": {
+    "title": "tower-*",
+    "timeFieldName": "@timestamp"
+  }
+}
