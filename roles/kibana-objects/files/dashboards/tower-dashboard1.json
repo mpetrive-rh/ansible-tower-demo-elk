@@ -1,0 +1,63 @@
+{
+  "attributes": {
+    "title": "Tower Job Template Dashboard",
+    "description": "Tower Job Template Dashboard",
+    "panelsJSON": [
+      {
+        "gridData": {
+          "x": 0,
+          "y": 0,
+          "w": 24,
+          "h": 15,
+          "i": "1"
+        },
+        "version": "6.7.1",
+        "panelIndex": "1",
+        "type": "visualization",
+        "id": "tower-job-template-execution",
+        "embeddableConfig": {
+          "vis": {
+            "params": {
+              "sort": {
+                "columnIndex": null,
+                "direction": null
+              }
+            }
+          }
+        }
+      },
+      {
+        "gridData": {
+          "x": 24,
+          "y": 0,
+          "w": 24,
+          "h": 15,
+          "i": "2"
+        },
+        "version": "6.7.1",
+        "panelIndex": "2",
+        "type": "visualization",
+        "id": "tower-job-template-failed",
+        "embeddableConfig": {
+          "vis": {
+            "params": {
+              "sort": {
+                "columnIndex": null,
+                "direction": null
+              }
+            }
+          }
+        }
+      }
+    ],
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": {
+        "query": {
+          "query": "",
+          "language": "kuery"
+        },
+        "filter": []
+      }
+    }
+  }
+}

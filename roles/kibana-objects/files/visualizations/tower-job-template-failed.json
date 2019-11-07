@@ -1,0 +1,166 @@
+{
+  "attributes": {
+    "title": "Tower Job Template Failures",
+    "description": "Tower Job Template Failures",
+    "visState": {
+      "title": "Tower Job Template Failures",
+      "type": "table",
+      "params": {
+        "perPage": 30,
+        "showPartialRows": false,
+        "showMetricsAtAllLevels": false,
+        "sort": {
+          "columnIndex": null,
+          "direction": null
+        },
+        "showTotal": false,
+        "totalFunc": "sum"
+      },
+      "aggs": [
+        {
+          "id": "1",
+          "enabled": true,
+          "type": "count",
+          "schema": "metric",
+          "params": {
+            "customLabel": "Number of Failures"
+          },
+        }
+        ,
+        {
+          "id": "2",
+          "enabled": false,
+          "type": "terms",
+          "schema": "bucket",
+          "params": {
+            "field": "event_data.playbook_uuid.keyword",
+            "size": 5,
+            "order": "desc",
+            "orderBy": "1",
+            "otherBucket": false,
+            "otherBucketLabel": "Other",
+            "missingBucket": false,
+            "missingBucketLabel": "Missing"
+          }
+        },
+        {
+          "id": "3",
+          "enabled": false,
+          "type": "terms",
+          "schema": "bucket",
+          "params": {
+            "field": "event.keyword",
+            "size": 5,
+            "order": "desc",
+            "orderBy": "1",
+            "otherBucket": false,
+            "otherBucketLabel": "Other",
+            "missingBucket": false,
+            "missingBucketLabel": "Missing",
+            "customLabel": ""
+          }
+        },
+        {
+          "id": "4",
+          "enabled": true,
+          "type": "terms",
+          "schema": "bucket",
+          "params": {
+            "field": "event_data.playbook.keyword",
+            "size": 5,
+            "order": "desc",
+            "orderBy": "1",
+            "otherBucket": false,
+            "otherBucketLabel": "Other",
+            "missingBucket": false,
+            "missingBucketLabel": "Missing",
+            "customLabel": "playbook"
+          }
+        },
+        {
+          "id": "5",
+          "enabled": true,
+          "type": "min",
+          "schema": "metric",
+          "params": {
+            "field": "@timestamp",
+            "customLabel": "First Failure"
+          }
+        },
+        {
+          "id": "6",
+          "enabled": true,
+          "type": "max",
+          "schema": "metric",
+          "params": {
+            "field": "@timestamp",
+            "customLabel": "Last Failure"
+          }
+        }
+      ]
+    },
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": {
+          "index": "tower-all",
+          "query": {
+            "query": "event:playbook_on_stats",
+            "language": "lucene"
+          },
+          "filter": [
+            {
+              "meta": {
+                "index": "tower-all",
+                "negate": false,
+                "disabled": false,
+                "alias": "FAIILURE",
+                "type": "phrase",
+                "key": "failed",
+                "value": "true",
+                "params": {
+                  "query": true,
+                  "type": "phrase"
+                }
+              },
+              "query": {
+                "match": {
+                  "failed": {
+                    "query": true,
+                    "type": "phrase"
+                  }
+                }
+              },
+              "$state": {
+                "store": "appState"
+              }
+            },
+            {
+              "meta": {
+                "index": "tower-all",
+                "negate": false,
+                "disabled": false,
+                "alias": "PLAYBOOK_ON_STATS",
+                "type": "phrase",
+                "key": "event",
+                "value": "playbook_on_stats",
+                "params": {
+                  "query": "playbook_on_stats",
+                  "type": "phrase"
+                }
+              },
+              "query": {
+                "match": {
+                  "event": {
+                    "query": "playbook_on_stats",
+                    "type": "phrase"
+                  }
+                }
+              },
+              "$state": {
+                "store": "appState"
+              }
+            }
+        ]
+      }
+    }
+  }
+}

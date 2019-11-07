@@ -1,0 +1,22 @@
+---
+
+- name:
+  uri:
+    url: "{{kibana_search_index}}"
+    method: GET
+  register: isearch
+
+- set_fact:
+    index_exists: "{{ isearch.json.saved_objects | selectattr('id','match',kibana_index) | list | length | bool }}"
+
+- include_vars:
+    file: "{{ kibana_index }}.json"
+    name: index_data
+
+- uri:
+    url: "{{ kibana_crud_index }}/{{ kibana_index }}"
+    body: "{{ index_data }}"
+    body_format: json
+    method: "{{ 'PUT' if index_exists else 'POST' }}"
+    headers:
+      "kbn-xsrf" : "reporting"

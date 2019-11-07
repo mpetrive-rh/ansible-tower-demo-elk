@@ -1,0 +1,17 @@
+---
+# tasks file for kibana-objects
+
+- name: gather up objects to import
+  set_fact:
+    kibana_index_patterns: "{{ lookup('fileglob', kibana_index_dir+'/*', wantlist=True) }}"
+    kibana_visualizations: "{{ lookup('fileglob', kibana_visualization_dir+'/*', wantlist=True) }}"
+    kibana_dashboard_patterns: "{{ lookup('fileglob', kibana_dashboard_dir+'/*', wantlist=True) }}"
+
+- include_tasks:
+    file: index-pattern.yml
+# - name: show index patterns to import
+#   debug:
+#     # msg: "{{ lookup('fileglob', kibana_index_dir+'/*') }}"
+#     msg: "{{ item }}"
+#   loop: "{{ lookup('fileglob', kibana_index_dir+'/*', wantlist=True) }}"
+  # loop:

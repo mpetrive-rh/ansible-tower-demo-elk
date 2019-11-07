@@ -1,0 +1,17 @@
+---
+
+  kibana_proto: http
+  kibana_host: localhost
+  kibana_port: 5601
+  kibana_base_api: "{{ kibana_proto }}://{{ kibana_host }}:{{ kibana_port }}/api"
+  kibana_search_visualization: "{{ kibana_base_api }}/saved_objects/_find/?type=visualization&fields=id"
+  kibana_search_index: "{{ kibana_base_api }}/saved_objects/_find/?type=index-pattern&fields=id"
+  kibana_search_dashboard: "{{ kibana_base_api }}/saved_objects/_find/?type=dashboard&fields=id"
+  kibana_crud_index: "{{ kibana_base_api }}/saved_objects/index-pattern"
+  kibana_crud_visualization: "{{ kibana_base_api }}/saved_objects/visualization"
+  kibana_crud_dashboard: "{{ kibana_base_api }}/saved_objects/dashboard"
+
+  ###
+  kibana_index_dir: files/index-patterns
+  kibana_visualization_dir: files/visualizations
+  kibana_dashboard_dir: files/dashboards

@@ -1,78 +1,81 @@
 - hosts: localhost
-  gather_facts: no
-  vars:
-    kibana_proto: http
-    kibana_host: 172.16.2.10
-    kibana_port: 5601
-    kibana_base_api: "{{ kibana_proto }}://{{ kibana_host }}:{{ kibana_port }}/api"
-    kibana_search_visualization: "{{ kibana_base_api }}/saved_objects/_find/?type=visualization&fields=id"
-    kibana_search_index: "{{ kibana_base_api }}/saved_objects/_find/?type=index-pattern&fields=id"
-    kibana_search_dashboard: "{{ kibana_base_api }}/saved_objects/_find/?type=dashboard&fields=id"
-    kibana_crud_index: "{{ kibana_base_api }}/saved_objects/index-pattern"
-    kibana_crud_visualization: "{{ kibana_base_api }}/saved_objects/visualization"
-    kibana_crud_dashboard: "{{ kibana_base_api }}/saved_objects/dashboard"
-    ###
-    kibana_index: tower-all
-    kibana_visualization: tower-playbooks-failed
-    kibana_dashboard: tower-dashboard1
-  tasks:
-
-  - uri:
-      url: "{{kibana_search_index}}"
-      method: GET
-    register: isearch
-
-  - set_fact:
-      index_exists: "{{ isearch.json.saved_objects | selectattr('id','match',kibana_index) | list | length | bool }}"
-
-  - include_vars:
-      file: "{{ kibana_index }}.json"
-      name: index_data
-
-  - uri:
-      url: "{{ kibana_crud_index }}/{{ kibana_index }}"
-      body: "{{ index_data }}"
-      body_format: json
-      method: "{{ 'PUT' if index_exists else 'POST' }}"
-      headers:
-        "kbn-xsrf" : "reporting"
-
-  - uri:
-      url: "{{kibana_search_visualization}}"
-      method: GET
-    register: vsearch
-
-  - set_fact:
-      visualization_exists: "{{ vsearch.json.saved_objects | selectattr('id','match',kibana_visualization) | list | length | bool }}"
-
-  - include_vars:
-      file: "{{ kibana_visualization }}.json"
-      name: visualization_data
-
-  - uri:
-      url: "{{ kibana_crud_visualization }}/{{ kibana_visualization }}"
-      body: "{{visualization_data | transform_visualization }}"
-      body_format: json
-      method: "{{ 'PUT' if visualization_exists else 'POST' }}"
-      headers:
-        "kbn-xsrf" : "reporting"
-
-  - uri:
-      url: "{{kibana_search_dashboard}}"
-      method: GET
-    register: dsearch
-
-  - set_fact:
-      dashboard_exists: "{{ dsearch.json.saved_objects | selectattr('id','match',kibana_dashboard) | list | length | bool }}"
-
-  - include_vars:
-      file: "{{ kibana_dashboard }}.json"
-      name: dashboard_data
-
-  - uri:
-      url: "{{ kibana_crud_dashboard }}/{{ kibana_dashboard }}"
-      body: "{{ dashboard_data | transform_dashboard }}"
-      body_format: json
-      method: "{{ 'PUT' if dashboard_exists else 'POST' }}"
-      headers:
-        "kbn-xsrf" : "reporting"
+  roles:
+  - role: kibana-objects
+# - hosts: localhost
+#   gather_facts: no
+#   vars:
+#     kibana_proto: http
+#     kibana_host: 172.16.2.10
+#     kibana_port: 5601
+#     kibana_base_api: "{{ kibana_proto }}://{{ kibana_host }}:{{ kibana_port }}/api"
+#     kibana_search_visualization: "{{ kibana_base_api }}/saved_objects/_find/?type=visualization&fields=id"
+#     kibana_search_index: "{{ kibana_base_api }}/saved_objects/_find/?type=index-pattern&fields=id"
+#     kibana_search_dashboard: "{{ kibana_base_api }}/saved_objects/_find/?type=dashboard&fields=id"
+#     kibana_crud_index: "{{ kibana_base_api }}/saved_objects/index-pattern"
+#     kibana_crud_visualization: "{{ kibana_base_api }}/saved_objects/visualization"
+#     kibana_crud_dashboard: "{{ kibana_base_api }}/saved_objects/dashboard"
+#     ###
+#     kibana_index: tower-all
+#     kibana_visualization: tower-playbooks-failed
+#     kibana_dashboard: tower-dashboard1
+#   tasks:
+#
+#   - uri:
+#       url: "{{kibana_search_index}}"
+#       method: GET
+#     register: isearch
+#
+#   - set_fact:
+#       index_exists: "{{ isearch.json.saved_objects | selectattr('id','match',kibana_index) | list | length | bool }}"
+#
+#   - include_vars:
+#       file: "{{ kibana_index }}.json"
+#       name: index_data
+#
+#   - uri:
+#       url: "{{ kibana_crud_index }}/{{ kibana_index }}"
+#       body: "{{ index_data }}"
+#       body_format: json
+#       method: "{{ 'PUT' if index_exists else 'POST' }}"
+#       headers:
+#         "kbn-xsrf" : "reporting"
+#
+#   - uri:
+#       url: "{{kibana_search_visualization}}"
+#       method: GET
+#     register: vsearch
+#
+#   - set_fact:
+#       visualization_exists: "{{ vsearch.json.saved_objects | selectattr('id','match',kibana_visualization) | list | length | bool }}"
+#
+#   - include_vars:
+#       file: "{{ kibana_visualization }}.json"
+#       name: visualization_data
+#
+#   - uri:
+#       url: "{{ kibana_crud_visualization }}/{{ kibana_visualization }}"
+#       body: "{{visualization_data | transform_visualization }}"
+#       body_format: json
+#       method: "{{ 'PUT' if visualization_exists else 'POST' }}"
+#       headers:
+#         "kbn-xsrf" : "reporting"
+#
+#   - uri:
+#       url: "{{kibana_search_dashboard}}"
+#       method: GET
+#     register: dsearch
+#
+#   - set_fact:
+#       dashboard_exists: "{{ dsearch.json.saved_objects | selectattr('id','match',kibana_dashboard) | list | length | bool }}"
+#
+#   - include_vars:
+#       file: "{{ kibana_dashboard }}.json"
+#       name: dashboard_data
+#
+#   - uri:
+#       url: "{{ kibana_crud_dashboard }}/{{ kibana_dashboard }}"
+#       body: "{{ dashboard_data | transform_dashboard }}"
+#       body_format: json
+#       method: "{{ 'PUT' if dashboard_exists else 'POST' }}"
+#       headers:
+#         "kbn-xsrf" : "reporting"
